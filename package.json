@@ -1,0 +1,32 @@
+{
+  "name": "pivot_table",
+  "version": "0.1.0",
+  "description": "pivot_table",
+  "main": "index.js",
+  "kibana": {
+    "version": "5.1.1"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "start": "plugin-helpers start",
+    "test:server": "plugin-helpers test:server",
+    "test:browser": "plugin-helpers test:browser",
+    "build": "plugin-helpers build",
+    "postinstall": "plugin-helpers postinstall"
+  },
+  "devDependencies": {
+    "@elastic/eslint-config-kibana": "0.0.2",
+    "@elastic/plugin-helpers": "5.1.1",
+    "babel-eslint": "4.1.8",
+    "chai": "^3.5.0",
+    "eslint": "1.10.3",
+    "eslint-plugin-mocha": "1.1.0"
+  },
+  "dependencies": {
+    "c3": "^0.4.11"
+  },
+  "build": {
+    "git": {},
+    "date": "Thu Jan 19 2017 02:37:24 GMT-0500 (EST)"
+  }
+}
