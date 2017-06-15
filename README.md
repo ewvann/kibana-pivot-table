@@ -59,7 +59,7 @@ Please also see [wiki of Nicolas Kruchten's Pivot Table](https://github.com/nico
 1. First go to the directory of the plugin
 	
 	```
-	cd /opt/kibana/plugins/pivot_table
+	cd $KIBANA_HOME/plugins/pivot_table
 	```
 
 2. Modify the contents of package.json
@@ -73,4 +73,4 @@ Please also see [wiki of Nicolas Kruchten's Pivot Table](https://github.com/nico
 	```
 
 The bundled zip file will locate in:
-```cd /opt/kibana/plugins/pivot_table/build```
+```cd $KIBANA_HOME/kibana/plugins/pivot_table/build```
