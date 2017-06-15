@@ -1,4 +1,4 @@
-## pivot_table
+## Pivot Table Plugin for Kibana 5
 
 A visualization plugin for kibana 5.x .
 
