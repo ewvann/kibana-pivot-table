@@ -6,6 +6,8 @@ Pivot tables are interactive tables that allow the user to group and summarize l
 
 Basically a wrapper of [Nicolas Kruchten's Pivot Table](http://nicolas.kruchten.com/pivottable/).
 
+![image](https://raw.githubusercontent.com/datavoyagerhk/kibana-pivot-table/master/image/simple_demo.gif)
+
 ## Feature
 
 * drag and drop UI
