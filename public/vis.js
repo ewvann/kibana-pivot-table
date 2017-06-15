@@ -55,25 +55,6 @@ define(function(require) {
             "Count as Fraction of Total",
             "Count as Fraction of Rows",
             "Count as Fraction of Columns"
-            // {name:"Count",function:"count(usFmtInt)"},
-            // {name:"Count Unique Values",function:"countUnique(usFmtInt)"},
-            // {name:"List Unique Values",function:"listUnique(\", \")"},
-            // {name:"Sum",function:"sum(usFmt)"},
-            // {name:"Integer Sum",function:"sum(usFmtInt)"},
-            // {name:"Average",function:"average(usFmt)"},
-            // {name:"Minimum",function:"min(usFmt)"},
-            // {name:"Maximum",function:"max(usFmt)"},
-            // {name:"First",function:"first(usFmt)"},
-            // {name:"Last",function:"last(usFmt)"},
-            // {name:"Sum over Sum",function:"sumOverSum(usFmt)"},
-            // {name:"80% Upper Bound",function:"sumOverSumBound80(true, usFmt)"},
-            // {name:"80% Lower Bound",function:"sumOverSumBound80(false, usFmt)"},
-            // {name:"Sum as Fraction of Total",function:""},
-            // {name:"Sum as Fraction of Rows",function:""},
-            // {name:"Sum as Fraction of Columns",function:""},
-            // {name:"Count as Fraction of Total",function:""},
-            // {name:"Count as Fraction of Rows",function:""},
-            // {name:"Count as Fraction of Columns",function:""}
           ],
         },
         editor: require('plugins/pivot_table/templates/pivot_table_editor.html') // Use this HTML as an options editor for this vis
@@ -129,22 +110,29 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
     editMode: false,
     pristine: true
   };
+  // by default, edit mode must be false during initialization, otherwise it will cause Kibana to crash
+  $scope.vis.params.editMode = false;
   $scope.table.editMode = $scope.vis.params.editMode;
-  // $scope.table.config=$scope.uiState.get('config',[]);
-  //PivotTable render
+
+  //PivotTable renderer
   $scope.renderPivotTable = function() {
       $(pivotOutput).pivot($scope.table.data, {
           renderers: $.extend(
           	$.pivotUtilities.renderers,
             $.pivotUtilities.c3_renderers
           ),
-          rendererName: "Table",
+          // rendererName: "Table",
+          rendererName: $scope.table.config.rendererName,
+          // turn renderName into render function
+          // https://github.com/nicolaskruchten/pivottable/issues/451
+          renderer: $.pivotUtilities.renderers[$scope.table.config.rendererName],
           cols: $scope.table.config.cols,
           rows: $scope.table.config.rows,
           // aggregators: $.pivotUtilities.aggregators,
           aggregator: $.pivotUtilities.aggregators[$scope.table.config.aggregatorName]($scope.table.config.vals),
           vals: $scope.table.config.vals,
           onRefresh: function(config) {
+              console.log("renderPivotTable onRefresh");
               var config_copy = JSON.parse(JSON.stringify(config));
               //delete some values which are functions
               delete config_copy["aggregators"];
@@ -159,20 +147,23 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
       });
   };
 
-  //PivotTable render with drag and drop UI
+  //PivotTable renderer with drag and drop UI
   $scope.renderPivotUITable = function() {
       $(pivotOutput).pivotUI($scope.table.data, {
           renderers: $.extend(
           	$.pivotUtilities.renderers,
             $.pivotUtilities.c3_renderers
           ),
-          rendererName: "Table",
+          // rendererName: "Table",
+          rendererName: $scope.table.config.rendererName,
+          renderer: $.pivotUtilities.renderers[$scope.table.config.rendererName],
           cols: $scope.table.config.cols,
           rows: $scope.table.config.rows,
           // aggregators: $.pivotUtilities.aggregators,
           aggregatorName: $scope.table.config.aggregatorName,
           vals: $scope.table.config.vals,
           onRefresh: function(config) {
+              console.log("renderPivotUITable onRefresh");
               var config_copy = JSON.parse(JSON.stringify(config));
               //delete some values which are functions
               delete config_copy["aggregators"];
@@ -196,19 +187,25 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
   };
   //update UI when new config apply
   $scope.$watch('vis.params.editMode', function(newValue, oldValue) {
+    console.log("vis.params.editMode $watch", $scope.vis.params.editMode);
     $scope.updateUI();
   }, true);
   $scope.$watch('table.config', function(newValue, oldValue) {
+    console.log("table.config $watch");
     $scope.updateUI();
     if($scope.table.pristine==false){
       $scope.uiState.set('config',$scope.table.config);
+      console.log("$scope.uiState.set", $scope.table.config);
     }
   }, true);
   //update the config of table when open a saved visualization
   $scope.$watch('uiState', function(newValue, oldValue) {
+    console.log("uiState $watch");
     $scope.table.config=$scope.uiState.get('config',{rows: [],cols: [],aggregatorName: "Count",vals: []});
     $scope.table.pristine=false;
   }, true);
+
+
   //
   //process the data from ES
   //
@@ -240,116 +237,8 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
       var tabifyAggResponse = Private(require('ui/agg_response/tabify/tabify'));
       var tabifyData = tabifyAggResponse($scope.vis, resp);
 
-      //check whether the config exist a columnsName that do not exist in the new query
-      // if (checkConfigDiffColums(tabifyData)==true) {
-      //   $scope.vis.params.config.cols=[];
-      //   $scope.vis.params.config.rows=[];
-      // }
       $scope.table.data=processEntry(tabifyData);
       $scope.updateUI();
     }
   });
-  // var checkConfigDiffColums = function(tabifyData){
-  //   var columnsName =[];
-  //   var notexist = false;
-  //   for (var i = 0; i < tabifyData.tables[0]["columns"].length; i++) {
-  //     columnsName.push(tabifyData.tables[0]["columns"][i]["title"]);
-  //   }
-  //   for (var key in $scope.vis.params.config.cols) {
-  //     if (!columnsName.hasOwnProperty(key)) {
-  //       return true;
-  //     }
-  //   }
-  //   for (var key in $scope.vis.params.config.rows) {
-  //     if (!columnsName.hasOwnProperty(key)) {
-  //       return true;
-  //     }
-  //   }
-  // };
 });
-// provide a directive for html
-// app.directive('pivot', [function() {
-//     return {
-//         restrict: 'AE',
-//         scope: {
-//             data: '=',
-//             config: '=',
-//             editMode: '='
-//         },
-//         link: function(scope, elem, attr) {
-//             var renderers = $.extend($.pivotUtilities.renderers);
-//
-//             if (scope.config == null) {
-//                 scope.config = {
-//                     rows: [],
-//                     cols: []
-//                 };
-//             }
-//
-//             scope.renderPivotTable = function() {
-//                 $(elem).pivot(scope.data, {
-//                     renderers: renderers,
-//                     rendererName: "Table",
-//                     cols: scope.config.cols,
-//                     rows: scope.config.rows,
-//                     onRefresh: function(config) {
-//                         var config_copy = JSON.parse(JSON.stringify(config));
-//                         //delete some values which are functions
-//                         delete config_copy["aggregators"];
-//                         delete config_copy["renderers"];
-//                         delete config_copy["derivedAttributes"];
-//                         //delete some bulky default values
-//                         delete config_copy["rendererOptions"];
-//                         delete config_copy["localeStrings"];
-//                         scope.config = config_copy;
-//                         scope.$apply();
-//                     }
-//                 });
-//             };
-//
-//             scope.renderPivotUITable = function() {
-//                 $(elem).pivotUI(scope.data, {
-//                     renderers: renderers,
-//                     rendererName: "Table",
-//                     cols: scope.config.cols,
-//                     rows: scope.config.rows,
-//                     onRefresh: function(config) {
-//                         var config_copy = JSON.parse(JSON.stringify(config));
-//                         //delete some values which are functions
-//                         delete config_copy["aggregators"];
-//                         delete config_copy["renderers"];
-//                         delete config_copy["derivedAttributes"];
-//                         //delete some bulky default values
-//                         delete config_copy["rendererOptions"];
-//                         delete config_copy["localeStrings"];
-//                         scope.config = config_copy;
-//                         scope.$apply();
-//                     }
-//                 });
-//             };
-//
-//             var updateUI = function(){
-//               if (scope.editMode) {
-//                   scope.renderPivotUITable();
-//               } else {
-//                   scope.renderPivotTable();
-//               }
-//             };
-//             scope.$watch('scope.editMode', function(newValue, oldValue) {
-//               console.log("watch " , scope.editMode);
-//               updateUI();
-//             }, true);
-//             //
-//             scope.$watch('scope.data', function(newValue, oldValue) {
-//               console.log("watch " , scope.data);
-//               updateUI();
-//             }, true);
-//             scope.$watch('scope.config', function(newValue, oldValue) {
-//               console.log("watch " , scope.config);
-//               updateUI();
-//             }, true);
-//
-//             updateUI();
-//         }
-//     };
-// }]);
