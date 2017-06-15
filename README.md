@@ -6,8 +6,6 @@ Pivot tables are interactive tables that allow the user to group and summarize l
 
 Basically a wrapper of [Nicolas Kruchten's Pivot Table](http://nicolas.kruchten.com/pivottable/).
 
-![image](http://nicolas.kruchten.com/pivottable/images/animation.gif)
-
 ## Feature
 
 * drag and drop UI
