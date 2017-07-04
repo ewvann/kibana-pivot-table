@@ -9,7 +9,6 @@ import './less/main.less';
 import './controller/controller.js';
 
 define(function(require) {
-  // require('plugins/pivot_table/less/main.less');
   require('plugins/pivot_table/dist/jquery.min.js');
   require('plugins/pivot_table/dist/jquery-ui.min.js');
   require('plugins/pivot_table/dist/pivot.css');
