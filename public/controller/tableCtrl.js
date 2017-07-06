@@ -1,7 +1,7 @@
 import uiModules from 'ui/modules';
-var app = uiModules.get('app/pivot_table', []);
 
-app.controller('pivotTable', function ($scope, $timeout,Private) {
+uiModules.get('app/pivot_table', [])
+.controller('tableControler',function($scope, $timeout,Private){
   $scope.title = 'Pivot Table';
   $scope.description = 'pivot_table';
 
@@ -27,9 +27,9 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
 
   //PivotTable renderer
   $scope.renderPivotTable = function() {
-      $(pivotOutput).pivot($scope.table.data, {
+      $($scope.instance).pivot($scope.table.data, {
           renderers: $.extend(
-          	$.pivotUtilities.renderers,
+            $.pivotUtilities.renderers,
             $.pivotUtilities.c3_renderers
           ),
           rendererName: $scope.table.config.rendererName,
@@ -41,7 +41,6 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
           aggregator: $.pivotUtilities.aggregators[$scope.table.config.aggregatorName]($scope.table.config.vals),
           vals: $scope.table.config.vals,
           onRefresh: function(config) {
-              console.log("renderPivotTable onRefresh");
               var config_copy = JSON.parse(JSON.stringify(config));
               //delete some values which are functions
               delete config_copy["aggregators"];
@@ -58,9 +57,9 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
 
   //PivotTable renderer with drag and drop UI
   $scope.renderPivotUITable = function() {
-      $(pivotOutput).pivotUI($scope.table.data, {
+      $($scope.instance).pivotUI($scope.table.data, {
           renderers: $.extend(
-          	$.pivotUtilities.renderers,
+            $.pivotUtilities.renderers,
             $.pivotUtilities.c3_renderers
           ),
           // rendererName: "Table",
@@ -96,11 +95,9 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
   };
   //update UI when new config apply
   $scope.$watch('vis.params.editMode', function(newValue, oldValue) {
-    console.log("vis.params.editMode $watch", $scope.vis.params.editMode);
     $scope.updateUI();
   }, true);
   $scope.$watch('table.config', function(newValue, oldValue) {
-    console.log("table.config $watch");
     $scope.updateUI();
     if($scope.table.pristine==false){
       $scope.uiState.set('config',$scope.table.config);
@@ -109,7 +106,6 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
   }, true);
   //update the config of table when open a saved visualization
   $scope.$watch('uiState', function(newValue, oldValue) {
-    console.log("uiState $watch");
     $scope.table.config=$scope.uiState.get('config',{rows: [],cols: [],aggregatorName: "Count",vals: []});
     $scope.table.pristine=false;
   }, true);
@@ -135,14 +131,12 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
       }
       result.push(tempObj);
     }
-    console.log("process result:",result);
     return result;
   };
 
   //process data and update UI after query elastic search
   $scope.$watch('esResponse', function (resp) {
     if (resp) {
-      console.log("esResponse",resp);
       var tabifyAggResponse = Private(require('ui/agg_response/tabify/tabify'));
       var tabifyData = tabifyAggResponse($scope.vis, resp);
 
@@ -150,4 +144,5 @@ app.controller('pivotTable', function ($scope, $timeout,Private) {
       $scope.updateUI();
     }
   });
+
 });

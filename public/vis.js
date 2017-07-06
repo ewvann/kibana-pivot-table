@@ -6,7 +6,9 @@ import VisSchemasProvider from 'ui/vis/schemas';
 
 import 'ui/autoload/styles';
 import './less/main.less';
-import './controller/controller.js';
+import './controller/directive_provider.js';
+import './controller/tableCtrl.js';
+
 
 define(function(require) {
   require('plugins/pivot_table/dist/jquery.min.js');
