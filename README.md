@@ -14,9 +14,17 @@ Basically a wrapper of [Nicolas Kruchten's Pivot Table](http://nicolas.kruchten.
 * filtering
 * charts
 
-## Setup
+## Installation
 
-//TODO
+```sh
+cd YOUR DOWNLOAD-DIRECTORY
+wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivot_table-5.1.2.zip
+$KIBANA_HOME/bin/kibana-plugin install file:///YOUR-DOWNLOAD-DIRECTORY/pivot_table-5.1.2.zip```
+
+example:
+```sh
+wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivot_table-5.1.2.zip -d /tmp
+$usr/share/bin/kibana-plugin install file:///tmp/pivot_table-5.1.2.zip```
 
 ## development
 
