@@ -22,10 +22,10 @@ wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivo
 $KIBANA_HOME/bin/kibana-plugin install file:///YOUR-DOWNLOAD-DIRECTORY/pivot_table-5.1.2.zip
 ```
 
-example for rpm installed kibana:
+example for Kibana installed with RPM on CentOS
 ```
 wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivot_table-5.1.2.zip -d /tmp
-usr/share/bin/kibana-plugin install file:///tmp/pivot_table-5.1.2.zip
+/usr/share/bin/kibana-plugin install file:///tmp/pivot_table-5.1.2.zip
 ```
 
 ## development
