@@ -18,14 +18,14 @@ Basically a wrapper of [Nicolas Kruchten's Pivot Table](http://nicolas.kruchten.
 
 ```sh
 cd YOUR DOWNLOAD-DIRECTORY
-wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivot_table-5.1.2.zip
-$KIBANA_HOME/bin/kibana-plugin install file:///YOUR-DOWNLOAD-DIRECTORY/pivot_table-5.1.2.zip
+wget https://github.com/datavoyagerhk/kibana-pivot-table/releases/download/v0.1.0/pivot_table-v0.1.0.zip
+$KIBANA_HOME/bin/kibana-plugin install file:///YOUR-DOWNLOAD-DIRECTORY/pivot_table-v0.1.0.zip
 ```
 
 example for Kibana installed with RPM on CentOS
 ```
-wget https://github.com/datavoyagerhk/kibana-pivot-table/raw/master/release/pivot_table-5.1.2.zip -d /tmp
-/usr/share/bin/kibana-plugin install file:///tmp/pivot_table-5.1.2.zip
+wget https://github.com/datavoyagerhk/kibana-pivot-table/releases/download/v0.1.0/pivot_table-v0.1.0.zip
+/usr/share/bin/kibana-plugin install file:///tmp/pivot_table-v0.1.0.zip
 ```
 
 ## development
