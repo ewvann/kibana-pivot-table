@@ -1,6 +1,6 @@
-## Pivot Table Plugin for Kibana 5
+## Pivot Table Plugin for Kibana 6
 
-A visualization plugin for kibana 5.x .
+A visualization plugin for kibana 6.x .
 
 Pivot tables are interactive tables that allow the user to group and summarize large amounts of data in a concise.
 
