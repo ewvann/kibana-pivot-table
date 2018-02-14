@@ -1,4 +1,6 @@
-import uiModules from 'ui/modules';
+import moment from 'moment';
+
+import { uiModules } from 'ui/modules';
 
 uiModules.get('app/pivot_table', [])
 .controller('tableControler',function($scope, $timeout,Private){
@@ -41,6 +43,7 @@ uiModules.get('app/pivot_table', [])
           aggregator: $.pivotUtilities.aggregators[$scope.table.config.aggregatorName]($scope.table.config.vals),
           vals: $scope.table.config.vals,
           onRefresh: function(config) {
+              console.log("renderPivotTable onRefresh");
               var config_copy = JSON.parse(JSON.stringify(config));
               //delete some values which are functions
               delete config_copy["aggregators"];
@@ -137,10 +140,7 @@ uiModules.get('app/pivot_table', [])
   //process data and update UI after query elastic search
   $scope.$watch('esResponse', function (resp) {
     if (resp) {
-      var tabifyAggResponse = Private(require('ui/agg_response/tabify/tabify'));
-      var tabifyData = tabifyAggResponse($scope.vis, resp);
-
-      $scope.table.data=processEntry(tabifyData);
+      $scope.table.data = processEntry(resp);
       $scope.updateUI();
     }
   });
