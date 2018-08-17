@@ -1,7 +1,9 @@
-import uiModules from 'ui/modules';
+import { uiModules } from 'ui/modules';
+import { AggResponseTabifyProvider } from 'ui/agg_response/tabify/tabify';
 
 uiModules.get('app/pivot_table', [])
 .controller('tableControler',function($scope, $timeout,Private){
+  const tabifyAggResponse = Private(AggResponseTabifyProvider);
   $scope.title = 'Pivot Table';
   $scope.description = 'pivot_table';
 
@@ -137,7 +139,6 @@ uiModules.get('app/pivot_table', [])
   //process data and update UI after query elastic search
   $scope.$watch('esResponse', function (resp) {
     if (resp) {
-      var tabifyAggResponse = Private(require('ui/agg_response/tabify/tabify'));
       var tabifyData = tabifyAggResponse($scope.vis, resp);
 
       $scope.table.data=processEntry(tabifyData);
