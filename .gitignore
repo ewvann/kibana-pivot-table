@@ -1,0 +1,7 @@
+node_modules/
+build/
+local/
+npm-debug.log*
+package-lock.json
+.project
+*.zip
